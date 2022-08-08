@@ -32,6 +32,34 @@ const run = async () => {
       const result = await userDataCollection.updateOne(filter, doc, options);
       res.send({ message: 'Successfully created ', result });
     });
+
+    app.get('/user/:email', async(req,res) => {
+      const email = req.params.email;
+      const query = {email: email};
+      const result = await userDataCollection.findOne(query);
+
+      res.send(result);
+    })
+
+    app.patch('/user/profile/:email', async (req, res) => {
+      const email = req.params.email;
+      const newUserInfo = req.body;
+      const filter = { email: email };
+      const options = { upsert: true };
+      const updateDoc = {
+        $set: newUserInfo,
+      };
+
+      const result = await userDataCollection.updateOne(
+        filter,
+        updateDoc,
+        options
+      );
+
+      res.send({ success: true, result });
+    })
+
+
   } catch (error) {
     console.log(error);
   }
