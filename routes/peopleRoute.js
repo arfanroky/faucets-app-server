@@ -56,7 +56,7 @@ router.post(
   ],
   userValidationHandler,
   async (req, res) => {
-    console.log(req.body);
+   
     try {
       const user = await People.findOne({email: req?.body?.email});
       if(user){
@@ -64,19 +64,22 @@ router.post(
           error: 'Email is already exists'
         })
       }
+      else{
+        console.log('sdf');
+        const salt = await bcrypt.genSalt(Number(10))
+        const hashPassword = await bcrypt.hash(req.body.password, salt)
+        await new People({...req.body, password: hashPassword}).save(
+          (err, result) => {
+            if (err) {
+              res.status(500).send({ error: 'error' });
+            }
+            if (result) {
+              res.status(200).send({ message: true});
+            }
+          }
+        );
+      }
 
-      const salt = await bcrypt.genSalt(Number(10))
-      const hashPassword = await bcrypt.hash(req.body.password, salt)
-      await new People({...req.body, password: hashPassword}).save(
-        (err, result) => {
-          if (err) {
-            res.status(500).send({ error: 'error' });
-          }
-          if (result) {
-            res.status(200).send({ message: true});
-          }
-        }
-      );
     } catch (error) {
       res.status(500).send({
         error: 'internal server error!',
