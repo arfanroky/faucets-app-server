@@ -6,8 +6,6 @@ const app = express();
 const port = process.env.PORT || 8000;
 
 // routes
-// const registerRouter = require('./routes/register');
-// const loginRouter = require('./routes/login.js');
 const authorityRouter = require('./routes/authority.js');
 const walletRouter = require('./routes/wallet.js');
 const signUpRouter = require('./routes/peopleRoute');
@@ -28,14 +26,12 @@ app.use(express.json());
 app.use(cors());
 
 // api
-// app.use('/register', registerRouter);
-// app.use('/people', loginRouter);
 app.use('/authority', authorityRouter);
 app.use('/wallet', walletRouter);
 app.use('/people', signUpRouter);
 
 
-app.get('/', () => {
+app.get('/', (req, res) => {
   res.send('faucets server')
 })
 
