@@ -35,5 +35,9 @@ app.use('/wallet', walletRouter);
 app.use('/people', signUpRouter);
 
 
+app.get('/', () => {
+  res.send('faucets server')
+})
+
 
 app.listen(port, () => console.log('Listening on the port', port));
