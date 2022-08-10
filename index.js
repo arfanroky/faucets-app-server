@@ -14,7 +14,7 @@ const peopleRouter = require('./routes/peopleRoute');
 
 // database connection
 mongoose
-  .connect("mongodb://localhost/faucets", {
+  .connect(process.env.DB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
