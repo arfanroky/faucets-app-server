@@ -4,8 +4,6 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const app = express();
 const port = process.env.PORT || 8000;
-
-// routes
 const authorityRouter = require('./routes/authority.js');
 const walletRouter = require('./routes/wallet.js');
 const peopleRouter = require('./routes/peopleRoute');
