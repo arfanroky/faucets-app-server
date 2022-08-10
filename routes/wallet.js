@@ -2,9 +2,8 @@ const router = require('express').Router();
 const mongoose = require('mongoose');
 const walletSchema = require('../models/walletSchema.js');
 const Wallet = new mongoose.model('wallet', walletSchema);
-const { check, validationResult } = require('express-validator');
+const { check} = require('express-validator');
 const {
-  walletValidator,
   walletValidationHandler,
 } = require('../validate/walletFieldValidator.js');
 
@@ -16,12 +15,11 @@ router.post('/',[
 ],
 walletValidationHandler,
  async (req, res, next) => {
-
+  console.log(req.body);
   const walletInfo = {
     wallet: req.body.wallet,
     link: req.body.link,
     eth: req.body.eth,
-    email: req.body.email,
   };
 
   try {
@@ -33,7 +31,7 @@ walletValidationHandler,
 } catch (error) {
     res.status(500).send({
         errors:{
-            common: {msg: 'Unknown error accrued!'} 
+            error: {msg: 'Unknown error accrued!'} 
         }
     })
 }

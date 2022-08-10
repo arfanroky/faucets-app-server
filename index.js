@@ -10,8 +10,6 @@ const authorityRouter = require('./routes/authority.js');
 const walletRouter = require('./routes/wallet.js');
 const peopleRouter = require('./routes/peopleRoute');
 
-
-
 // database connection
 mongoose
   .connect(process.env.DB_URI, {
@@ -26,9 +24,10 @@ mongoose
 app.use(express.json());
 app.use(cors());
 
+
 // api
 app.use('/authority', authorityRouter);
-app.use('/wallet', walletRouter);
+app.use('/wallet',cors() ,walletRouter);
 app.use('/people', peopleRouter);
 // app.use('/people', peopleRouter);
 
