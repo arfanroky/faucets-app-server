@@ -8,7 +8,8 @@ const port = process.env.PORT || 8000;
 // routes
 const authorityRouter = require('./routes/authority.js');
 const walletRouter = require('./routes/wallet.js');
-const signUpRouter = require('./routes/peopleRoute');
+const peopleRouter = require('./routes/peopleRoute');
+
 
 
 // database connection
@@ -28,7 +29,8 @@ app.use(cors());
 // api
 app.use('/authority', authorityRouter);
 app.use('/wallet', walletRouter);
-app.use('/people', signUpRouter);
+app.use('/people', peopleRouter);
+// app.use('/people', peopleRouter);
 
 
 app.get('/', (req, res) => {

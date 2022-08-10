@@ -56,15 +56,24 @@ router.post(
   ],
   userValidationHandler,
   async (req, res) => {
+    console.log(req.body);
     try {
+      const user = await People.findOne({email: req?.body?.email});
+      if(user){
+        return res.status(409).send({
+          error: 'Email is already exists'
+        })
+      }
 
-      await new People(req.body, { password: bcrypt.hash(req.body.password, 10) }).save(
+      const salt = await bcrypt.genSalt(Number(10))
+      const hashPassword = await bcrypt.hash(req.body.password, salt)
+      await new People({...req.body, password: hashPassword}).save(
         (err, result) => {
           if (err) {
             res.status(500).send({ error: 'error' });
           }
           if (result) {
-            res.status(200).send({ message: true, result });
+            res.status(200).send({ message: true});
           }
         }
       );
@@ -76,21 +85,25 @@ router.post(
   }
 );
 
-router.get('/:email/:password', async (req, res) => {
-  console.log(req.body);
+router.get('/:email/:password',
+async (req, res) => {
+  console.log(req.params);
  try {
-  const query = req.params.email;
-  const queryPassword = req.params.password;
-  const result = await People.find({email: query, password: queryPassword}).exec();
-  if(!result){
-    res.status(500).send({
-      error: 'Invalid email'
-    })
+  const result = await People.findOne({email: req?.params?.email});
+
+  const validPassword = await bcrypt.compare(req?.params?.password, result.password)
+  
+  if(!result || !validPassword){
+    return res.status(401).send({error: 'Incorrect Email or Password!'})
   }
-  res.status(200).send({message:true, result});
+
+  if(result){
+    res.status(200).send({message:true, result});
+  }
+
  } catch (error) {
   res.status(500).send({
-    error: 'Invalid'
+    error: 'Internal server error'
   })
  }
 });
